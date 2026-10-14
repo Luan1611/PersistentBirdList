@@ -16,12 +16,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import br.edu.ifsp.scl.prdm.sc3029531.persistentbirdlist.model.Bird
+import br.edu.ifsp.scl.prdm.sc3029531.persistentbirdlist.model.Operation
 import br.edu.ifsp.scl.prdm.sc3029531.persistentbirdlist.ui.theme.PersistentBirdListTheme
 
 @Composable
-fun BirdScreen(modifier: Modifier = Modifier, bird: Bird = Bird(), onSaveAndQuit: (Bird) -> Unit) {
+fun BirdScreen(modifier: Modifier = Modifier, bird: Bird = Bird(), operation: Operation, onSaveAndQuit: (Bird) -> Unit) {
 
     var aveAtual by rememberSaveable { mutableStateOf(bird) }
+
+    val isFieldEnable: Boolean = operation == Operation.NEW_OR_EDIT
 
     Column(
         modifier = modifier.fillMaxWidth()
@@ -32,7 +35,8 @@ fun BirdScreen(modifier: Modifier = Modifier, bird: Bird = Bird(), onSaveAndQuit
             label = { Text(text = "Nome") },
             onValueChange = { novoValorNome ->
                 aveAtual = aveAtual.copy(nome = novoValorNome)
-            }
+            },
+            enabled = isFieldEnable
         )
 
         OutlinedTextField(
@@ -42,7 +46,8 @@ fun BirdScreen(modifier: Modifier = Modifier, bird: Bird = Bird(), onSaveAndQuit
             onValueChange = { novoValorEspecie ->
                 aveAtual = aveAtual.copy(especie = novoValorEspecie)
 
-            }
+            },
+            enabled = isFieldEnable
         )
 
         OutlinedTextField(
@@ -51,17 +56,21 @@ fun BirdScreen(modifier: Modifier = Modifier, bird: Bird = Bird(), onSaveAndQuit
             label = { Text(text = "Idade") },
             onValueChange = { novoValorIdade ->
                 aveAtual = aveAtual.copy(idade = novoValorIdade)
-            }
+            },
+            enabled = isFieldEnable
         )
 
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = {
-                onSaveAndQuit(aveAtual)
+        if (isFieldEnable) {
+            Button(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = {
+                    onSaveAndQuit(aveAtual)
+                }
+            ) {
+                Text(text = "Salvar e sair")
             }
-        ) {
-            Text(text = "Salvar e sair")
         }
+
     }
 
 }
@@ -74,7 +83,8 @@ fun BirdScreenPreview() {
     PersistentBirdListTheme {
         Surface() {
             BirdScreen(
-                onSaveAndQuit = {}
+                onSaveAndQuit = {},
+                operation = Operation.VIEW
             )
         }
     }

@@ -25,7 +25,13 @@ import br.edu.ifsp.scl.prdm.sc3029531.persistentbirdlist.model.Bird
 import br.edu.ifsp.scl.prdm.sc3029531.persistentbirdlist.ui.theme.PersistentBirdListTheme
 
 @Composable
-fun BirdListScreen(modifier: Modifier = Modifier, birdList: List<Bird>) {
+fun BirdListScreen(
+    modifier: Modifier = Modifier,
+    birdList: List<Bird>,
+    onViewBird: (Bird) -> Unit,
+    onEditBird: (Bird) -> Unit,
+    onRemoveBird: (Bird) -> Unit
+) {
 
     LazyColumn(modifier = modifier.fillMaxWidth()) {
 
@@ -41,7 +47,7 @@ fun BirdListScreen(modifier: Modifier = Modifier, birdList: List<Bird>) {
                         .fillMaxWidth()
                         .combinedClickable(
                             onClick = {
-
+                                onViewBird(currentBird)
                             },
                             onLongClick = {
                                 caixaExpandida = true
@@ -63,13 +69,13 @@ fun BirdListScreen(modifier: Modifier = Modifier, birdList: List<Bird>) {
                     DropdownMenuItem(
                         text = { Text(text = "Editar") },
                         onClick = {
-
+                            onEditBird(currentBird)
                         }
                     )
                     DropdownMenuItem(
                         text = { Text(text = "Remover") },
                         onClick = {
-
+                            onRemoveBird(currentBird)
                         }
                     )
                 }
@@ -89,7 +95,10 @@ fun BirdListScreenPreview() {
     PersistentBirdListTheme {
         Surface() {
             BirdListScreen(
-                birdList = listOf()
+                birdList = listOf(),
+                onViewBird = {},
+                onEditBird = {},
+                onRemoveBird = {}
             )
         }
     }

@@ -21,7 +21,10 @@ fun MainNavHost(
         composable(
             route = Screen.BirdListScreen.route
         ) {
-            BirdListRoute(birdViewModel = birdViewModel)
+            BirdListRoute(
+                birdViewModel = birdViewModel,
+                onNavigate = { navHostController.navigate(Screen.Bird.route) }
+            )
         }
 
         composable(
